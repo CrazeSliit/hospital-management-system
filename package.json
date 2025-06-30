@@ -5,8 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:netlify": "./build.sh",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "prisma generate",
+    "db:deploy": "prisma db push",
+    "postinstall": "prisma generate || echo 'Prisma generation skipped'"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",

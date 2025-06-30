@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hospital Management System
 
-## Getting Started
+A comprehensive hospital management system built with Next.js, Prisma, and MongoDB.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Patient Dashboard**: Complete CRUD operations for appointments, medical records, prescriptions
+- **Doctor Dashboard**: Patient management, appointment scheduling
+- **Nurse Dashboard**: Patient vitals, task management
+- **Admin Dashboard**: System overview and management
+- **Authentication**: Role-based access control
+- **Database**: MongoDB with Prisma ORM
+
+## Deployment Instructions
+
+### For Netlify/Vercel Deployment
+
+The application is configured to handle Prisma client generation automatically during deployment. The build process includes:
+
+1. **Automatic Prisma Generation**: The build script includes `prisma generate` 
+2. **Binary Targets**: Configured for both local development and production environments
+3. **Environment Variables**: Ensure all required environment variables are set
+
+### Required Environment Variables
+
+```env
+DATABASE_URL="your-mongodb-connection-string"
+NEXTAUTH_URL="your-deployment-url"
+NEXTAUTH_SECRET="your-secret-key"
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Build Commands
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Local Development**: `npm run dev`
+- **Production Build**: `npm run build`
+- **Netlify Build**: Uses automatic `netlify.toml` configuration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Database Setup
 
-## Learn More
+1. Ensure MongoDB database is accessible
+2. Prisma client will be generated automatically during build
+3. Database connection is tested on startup
 
-To learn more about Next.js, take a look at the following resources:
+### Troubleshooting
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Prisma Client Issues on Windows
+If you encounter permission errors with Prisma generation on Windows:
+1. This is a known Windows-specific issue
+2. The application will still deploy successfully on cloud platforms
+3. Use WSL2 or deploy directly to avoid local Windows permission issues
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+#### Build Failures
+1. Ensure all environment variables are properly set
+2. Check MongoDB connection string format
+3. Verify Node.js version compatibility (v18 recommended)
 
-## Deploy on Vercel
+## Local Development
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up environment variables in `.env`
+4. Start development server: `npm run dev`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Production Deployment
+
+The application is optimized for deployment on:
+- Netlify
+- Vercel  
+- Any Node.js hosting platform
+
+The build process automatically handles:
+- Prisma client generation
+- Next.js optimization
+- Static asset compilation
+
+## API Endpoints
+
+- `/api/appointments` - Appointment CRUD operations
+- `/api/medical-records` - Medical records management
+- `/api/prescriptions` - Prescription management
+- `/api/vitals` - Patient vitals tracking
+
+## Database Schema
+
+The application uses a comprehensive Prisma schema with:
+- User management (Patients, Doctors, Nurses, Admins)
+- Appointment scheduling
+- Medical records
+- Prescription tracking
+- Payment processing
+- Notification system
+
+## Security Features
+
+- NextAuth.js authentication
+- Role-based access control
+- Secure API routes
+- Environment variable protection
