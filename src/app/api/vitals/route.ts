@@ -20,11 +20,20 @@ export async function GET() {
 
     const userId = session.user.id;
 
-    // Get latest vitals for the current user from nurse assignments
+    // Find the patient record
+    const patient = await prisma.patient.findFirst({
+      where: { userId: userId }
+    });
+
+    if (!patient) {
+      return NextResponse.json({ error: 'Patient not found' }, { status: 404 });
+    }
+
+    // Get latest vitals for the current patient from nurse assignments
     const latestAssignment = await prisma.nurseAssignment.findFirst({
       where: {
         appointment: {
-          patientId: userId,
+          patientId: patient.id,
         },
         vitals: {
           not: null,

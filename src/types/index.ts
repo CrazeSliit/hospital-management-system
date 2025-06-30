@@ -123,7 +123,7 @@ export interface NotificationData {
   message: string
   isEmail?: boolean
   isSMS?: boolean
-  metadata?: any
+  metadata?: Record<string, unknown>
 }
 
 export interface PaymentData {
@@ -163,7 +163,7 @@ export interface AuditLogData {
   userId?: string
   action: string
   resource: string
-  details?: any
+  details?: Record<string, unknown>
   ipAddress?: string
   userAgent?: string
 }

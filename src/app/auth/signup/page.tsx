@@ -94,12 +94,18 @@ export default function SignUpPage() {
   };
 
   const handleMultiSelect = (name: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [name]: prev[name as keyof typeof prev].includes(value)
-        ? prev[name as keyof typeof prev].filter((item: string) => item !== value)
-        : [...prev[name as keyof typeof prev], value]
-    }));
+    setFormData(prev => {
+      const currentValue = prev[name as keyof typeof prev];
+      if (Array.isArray(currentValue)) {
+        return {
+          ...prev,
+          [name]: currentValue.includes(value)
+            ? currentValue.filter((item: string) => item !== value)
+            : [...currentValue, value]
+        };
+      }
+      return prev;
+    });
   };
 
   const validateStep = (currentStep: number) => {

@@ -22,8 +22,8 @@ export async function GET() {
       return NextResponse.json({ error: 'Patient not found' }, { status: 404 });
     }
 
-    // Get prescriptions for the current patient
-    const prescriptions = await prisma.prescription.findMany({
+    // Get medical records for the current patient
+    const medicalRecords = await prisma.medicalRecord.findMany({
       where: {
         patientId: patient.id,
       },
@@ -45,21 +45,23 @@ export async function GET() {
     });
 
     // Transform the data for the frontend
-    const formattedPrescriptions = prescriptions.map((prescription) => ({
-      id: prescription.id,
-      doctorName: `${prescription.doctor.user.firstName} ${prescription.doctor.user.lastName}`,
-      medications: prescription.medications,
-      instructions: prescription.instructions,
-      date: prescription.issuedDate.toLocaleDateString(),
-      validUntil: prescription.validUntil ? prescription.validUntil.toLocaleDateString() : null,
-      status: prescription.validUntil && prescription.validUntil > new Date() ? 'active' : 'expired',
+    const formattedRecords = medicalRecords.map((record) => ({
+      id: record.id,
+      doctorName: `${record.doctor.user.firstName} ${record.doctor.user.lastName}`,
+      diagnosis: record.diagnosis,
+      treatment: record.treatment,
+      symptoms: record.symptoms,
+      notes: record.notes,
+      date: record.createdAt.toLocaleDateString(),
+      followUpDate: record.followUpDate ? record.followUpDate.toLocaleDateString() : null,
+      attachments: record.attachments,
     }));
 
-    return NextResponse.json(formattedPrescriptions);
+    return NextResponse.json(formattedRecords);
   } catch (error) {
-    console.error('Error fetching prescriptions:', error);
+    console.error('Error fetching medical records:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch prescriptions' },
+      { error: 'Failed to fetch medical records' },
       { status: 500 }
     );
   }

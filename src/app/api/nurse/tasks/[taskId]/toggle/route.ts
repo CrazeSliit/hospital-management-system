@@ -4,9 +4,10 @@ import { authOptions } from '@/lib/auth';
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { taskId: string } }
+  context: { params: Promise<{ taskId: string }> }
 ) {
   try {
+    const params = await context.params;
     const session = await getServerSession(authOptions);
     
     if (!session || !session.user || session.user.role !== 'NURSE') {

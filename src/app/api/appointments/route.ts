@@ -13,16 +13,29 @@ export async function GET() {
 
     const userId = session.user.id;
 
-    // Get appointments for the current user
+    // Find the patient record
+    const patient = await prisma.patient.findFirst({
+      where: { userId: userId }
+    });
+
+    if (!patient) {
+      return NextResponse.json({ error: 'Patient not found' }, { status: 404 });
+    }
+
+    // Get appointments for the current patient
     const appointments = await prisma.appointment.findMany({
       where: {
-        patientId: userId,
+        patientId: patient.id,
       },
       include: {
         doctor: {
-          select: {
-            name: true,
-            specialization: true,
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
           },
         },
       },
@@ -34,11 +47,14 @@ export async function GET() {
     // Transform the data for the frontend
     const formattedAppointments = appointments.map((appointment) => ({
       id: appointment.id,
-      doctorName: appointment.doctor.name,
-      department: appointment.doctor.specialization,
+      doctorName: `${appointment.doctor.user.firstName} ${appointment.doctor.user.lastName}`,
+      department: appointment.doctor.specialties[0] || 'General Medicine',
       date: appointment.appointmentDate.toLocaleDateString(),
-      time: appointment.appointmentDate.toLocaleTimeString(),
+      time: `${appointment.startTime} - ${appointment.endTime}`,
       status: appointment.status.toLowerCase(),
+      reason: appointment.reason,
+      type: appointment.type,
+      fee: appointment.consultationFee,
     }));
 
     return NextResponse.json(formattedAppointments);
@@ -46,6 +62,92 @@ export async function GET() {
     console.error('Error fetching appointments:', error);
     return NextResponse.json(
       { error: 'Failed to fetch appointments' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(request: Request) {
+  try {
+    const session = await getServerSession(authOptions);
+    
+    if (!session || !session.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { doctorId, appointmentDate, startTime, endTime, reason, type = 'consultation' } = body;
+
+    // Validate required fields
+    if (!doctorId || !appointmentDate || !startTime || !endTime) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    const userId = session.user.id;
+
+    // Find the patient record
+    const patient = await prisma.patient.findFirst({
+      where: { userId: userId }
+    });
+
+    if (!patient) {
+      return NextResponse.json({ error: 'Patient not found' }, { status: 404 });
+    }
+
+    // Find the doctor record
+    const doctor = await prisma.doctor.findUnique({
+      where: { id: doctorId }
+    });
+
+    if (!doctor) {
+      return NextResponse.json({ error: 'Doctor not found' }, { status: 404 });
+    }
+
+    // Create the appointment
+    const appointment = await prisma.appointment.create({
+      data: {
+        patientId: patient.id,
+        doctorId: doctorId,
+        appointmentDate: new Date(appointmentDate),
+        startTime,
+        endTime,
+        type,
+        reason,
+        status: 'SCHEDULED',
+        consultationFee: doctor.consultationFee,
+      },
+      include: {
+        doctor: {
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // Format the response
+    const formattedAppointment = {
+      id: appointment.id,
+      doctorName: `${appointment.doctor.user.firstName} ${appointment.doctor.user.lastName}`,
+      department: appointment.doctor.specialties[0] || 'General Medicine',
+      date: appointment.appointmentDate.toLocaleDateString(),
+      time: `${appointment.startTime} - ${appointment.endTime}`,
+      status: appointment.status.toLowerCase(),
+      reason: appointment.reason,
+      type: appointment.type,
+      fee: appointment.consultationFee,
+    };
+
+    return NextResponse.json(formattedAppointment, { status: 201 });
+  } catch (error) {
+    console.error('Error creating appointment:', error);
+    return NextResponse.json(
+      { error: 'Failed to create appointment' },
       { status: 500 }
     );
   }

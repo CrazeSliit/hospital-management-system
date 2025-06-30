@@ -14,13 +14,21 @@ export const verifyPassword = async (password: string, hashedPassword: string): 
 }
 
 // JWT utilities
-export const generateToken = (payload: Record<string, unknown>, expiresIn: string = '24h'): string => {
-  return jwt.sign(payload, process.env.NEXTAUTH_SECRET!, { expiresIn })
+export const generateToken = (payload: Record<string, unknown>, expiresIn = '24h'): string => {
+  const secret = process.env.NEXTAUTH_SECRET;
+  if (!secret) {
+    throw new Error('NEXTAUTH_SECRET is not defined');
+  }
+  return jwt.sign(payload, secret, { expiresIn } as jwt.SignOptions)
 }
 
 export const verifyToken = (token: string): Record<string, unknown> | null => {
   try {
-    return jwt.verify(token, process.env.NEXTAUTH_SECRET!) as Record<string, unknown>
+    const secret = process.env.NEXTAUTH_SECRET;
+    if (!secret) {
+      throw new Error('NEXTAUTH_SECRET is not defined');
+    }
+    return jwt.verify(token, secret) as Record<string, unknown>
   } catch {
     return null
   }
@@ -28,7 +36,7 @@ export const verifyToken = (token: string): Record<string, unknown> | null => {
 
 // Email utilities
 const createEmailTransporter = () => {
-  return nodemailer.createTransporter({
+  return nodemailer.createTransport({
     host: process.env.EMAIL_SERVER_HOST,
     port: parseInt(process.env.EMAIL_SERVER_PORT || '587'),
     secure: false,

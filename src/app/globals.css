@@ -3,7 +3,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #111827;
   --primary: #dc2626;
   --primary-foreground: #ffffff;
   --secondary: #f3f4f6;
@@ -40,6 +40,123 @@ body {
   color: var(--foreground);
   font-family: 'Inter', system-ui, sans-serif;
   line-height: 1.6;
+}
+
+/* Ensure text visibility */
+* {
+  color: inherit;
+}
+
+/* Form elements */
+input, textarea, select {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280 !important;
+}
+
+/* Button text */
+button {
+  color: inherit;
+}
+
+/* Ensure dark text in light backgrounds */
+.bg-white {
+  color: #111827;
+}
+
+.bg-gray-50 {
+  color: #111827;
+}
+
+.bg-gray-100 {
+  color: #111827;
+}
+
+/* Text colors for better contrast */
+.text-gray-900 {
+  color: #111827 !important;
+}
+
+.text-gray-800 {
+  color: #1f2937 !important;
+}
+
+.text-gray-700 {
+  color: #374151 !important;
+}
+
+.text-gray-600 {
+  color: #4b5563 !important;
+}
+
+.text-gray-500 {
+  color: #6b7280 !important;
+}
+
+/* Modal and dropdown text */
+.fixed .bg-white {
+  color: #111827 !important;
+}
+
+.fixed .bg-white * {
+  color: inherit !important;
+}
+
+/* Specific text content overrides */
+h1, h2, h3, h4, h5, h6 {
+  color: #111827 !important;
+}
+
+p {
+  color: #374151 !important;
+}
+
+span {
+  color: inherit !important;
+}
+
+/* Dashboard and card content */
+.bg-white p {
+  color: #374151 !important;
+}
+
+.bg-white h1,
+.bg-white h2,
+.bg-white h3,
+.bg-white h4,
+.bg-white h5,
+.bg-white h6 {
+  color: #111827 !important;
+}
+
+/* Labels and form text */
+label {
+  color: #374151 !important;
+}
+
+/* Table and list content */
+td, th {
+  color: #374151 !important;
+}
+
+/* Navigation and header text */
+nav {
+  color: #374151 !important;
+}
+
+nav * {
+  color: inherit !important;
+}
+
+/* Ensure all text is visible in light theme */
+.bg-gray-50 *,
+.bg-gray-100 *,
+.bg-white * {
+  color: inherit !important;
 }
 
 /* Medical gradient */
