@@ -1,0 +1,11 @@
+# API routes
+/api/* /.netlify/functions/___netlify-handler 200
+
+# Auth routes
+/auth/* /.netlify/functions/___netlify-handler 200
+
+# Dashboard routes
+/dashboard/* /.netlify/functions/___netlify-handler 200
+
+# SPA fallback for all other routes
+/* /.netlify/functions/___netlify-handler 200

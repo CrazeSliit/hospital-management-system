@@ -1,11 +1,10 @@
 [build]
-  publish = ".next"
   command = "npm ci && npx prisma generate && npm run build"
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "18"
-  NPM_FLAGS = "--legacy-peer-deps"
-  PRISMA_CLI_BINARY_TARGETS = "rhel-openssl-1.0.x,linux-musl"
+  PRISMA_CLI_BINARY_TARGETS = "rhel-openssl-1.0.x,linux-musl,debian-openssl-1.1.x"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
@@ -13,27 +12,3 @@
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["@prisma/client", "prisma"]
-
-# API routes
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/___netlify-handler"
-  status = 200
-
-# Auth routes
-[[redirects]]
-  from = "/auth/*"
-  to = "/.netlify/functions/___netlify-handler"
-  status = 200
-
-# Dashboard routes
-[[redirects]]
-  from = "/dashboard/*"
-  to = "/.netlify/functions/___netlify-handler"
-  status = 200
-
-# SPA fallback
-[[redirects]]
-  from = "/*"
-  to = "/.netlify/functions/___netlify-handler"
-  status = 200
