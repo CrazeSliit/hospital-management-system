@@ -1,3 +1,14 @@
-# This file is intentionally minimal
-# The @netlify/plugin-nextjs handles all routing automatically
+# Netlify redirects for Next.js App Router
+# The @netlify/plugin-nextjs handles most routing automatically
 
+# API routes
+/api/* /.netlify/functions/___netlify-handler 200
+
+# Auth routes  
+/auth/* /.netlify/functions/___netlify-handler 200
+
+# Dashboard routes
+/dashboard/* /.netlify/functions/___netlify-handler 200
+
+# Catch all other routes (SPA fallback)
+/* /.netlify/functions/___netlify-handler 200

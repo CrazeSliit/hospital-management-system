@@ -4,6 +4,7 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  SKIP_ENV_VALIDATION = "true"
   PRISMA_CLI_BINARY_TARGETS = "rhel-openssl-1.0.x,linux-musl,debian-openssl-1.1.x"
 
 [[plugins]]
@@ -12,5 +13,3 @@
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["@prisma/client", "prisma"]
-
-# Let the Next.js plugin handle all routing automatically

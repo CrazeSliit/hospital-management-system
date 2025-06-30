@@ -4,6 +4,11 @@ import { authOptions } from '@/lib/auth';
 
 export async function GET() {
   try {
+    // Skip during build time
+    if (process.env.NODE_ENV === 'production' && !process.env.DATABASE_URL) {
+      return NextResponse.json({ error: 'Build time skip' }, { status: 503 });
+    }
+
     const session = await getServerSession(authOptions);
     
     if (!session || !session.user || session.user.role !== 'ADMIN') {
