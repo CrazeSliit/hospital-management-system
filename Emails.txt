@@ -1,0 +1,25 @@
+Email: admin@hospital.com
+Password: admin123
+Role: Admin (Complete System Control)
+
+
+Email: medical.admin@hospital.com
+Password: medadmin123
+Role: Admin (Medical Operations)
+
+
+Email: dr.smith@hospital.com
+Password: doctor123
+Role: Doctor (Patient Care & Appointments)
+
+
+Email: nurse.johnson@hospital.com
+Password: nurse123
+Role: Nurse (Patient Monitoring & Tasks)
+
+
+Email: patient.doe@email.com
+Password: patient123
+Role: Patient (Appointments & Health Records)
+
+
