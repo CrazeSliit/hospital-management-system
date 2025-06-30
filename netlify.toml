@@ -12,3 +12,5 @@
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["@prisma/client", "prisma"]
+
+# Let the Next.js plugin handle all routing automatically
