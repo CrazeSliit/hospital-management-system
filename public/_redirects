@@ -9,3 +9,6 @@
 
 # SPA fallback for all other routes
 /* /.netlify/functions/___netlify-handler 200
+
+/*    /index.html   200
+
